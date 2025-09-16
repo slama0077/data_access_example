@@ -1,5 +1,3 @@
-from gevent import monkey
-monkey.patch_all()
 from dateutil import rrule
 from datetime import datetime, timezone
 from itertools import product
@@ -7,22 +5,9 @@ import time
 import os
 
 #from concurrent.futures import ThreadPoolExecutor
-import gevent
 import requests
 from functools import partial
 from tqdm import tqdm
-
-def check_valid_urls(file_list, session=None):
-    """if not session:
-        session = requests.Session()"""
-    t = tqdm(range(len(file_list)))
-    check_url_part = partial(check_url, t)
-    """with ThreadPoolExecutor(max_workers=10) as executor:
-        valid_file_list = list(executor.map(check_url_part, file_list))"""
-    valid_file_list = [gevent.spawn(check_url_part, file_name) for file_name in file_list]
-    gevent.joinall(valid_file_list)
-    return [file.get() for file in valid_file_list if file.get() is not None]
-
 
 def check_url(t, file):
     filename = file.split("/")[-1]
@@ -436,14 +421,14 @@ def create_file_list(
             )
         )
     return r
-def generate_urls(start_date,end_date, fcst_cycle):
+def generate_urls(start_date,end_date, fcst_cycle, save_to_file=False):
 
     
     start_date = start_date
     end_date   = end_date
     fcst_cycle = fcst_cycle
     lead_time = [1]
-    # fcst_cycle = None # Retrieves a full day for each day within the range given.
+    # fcst_cycle = None # Retrieves a full day for each day withins the range given.
     runinput = 1
     varinput = 1
     geoinput = 1
@@ -460,8 +445,16 @@ def generate_urls(start_date,end_date, fcst_cycle):
         fcst_cycle,
         urlbaseinput,
     )
-    if os.path.exists("filenamelist.txt"):
-        os.remove("filenamelist.txt")   
-    with open("filenamelist.txt", "wt") as file:
-        for item in file_list:
-            file.write(f"{item}.json\n")
+    for i in range(len(file_list)):
+        file_list[i] = f"{file_list[i]}.json"
+    
+    if save_to_file:
+        if os.path.exists("filenamelist.txt"):
+            os.remove("filenamelist.txt")
+        with open("filenamelist.txt", "wt") as file:
+            for item in file_list:
+                file.write(f"{item}\n")
+    return file_list
+            
+            
+
