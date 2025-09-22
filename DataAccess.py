@@ -9,6 +9,7 @@ def data_access(start_date, end_date, fcst_cycle, lead_time, feature_ids):
         start_date: Start date in YYYYMMDDHHMM format.
         end_date: End date in YYYYMMDDHHMM format.
         fcst_cycle: List of forecast cycles to access (e.g., [0, 6, 12, 18]).
+        lead_time: List of lead times to access (e.g., [1, 2, 3, ..., 36]).
         feature_ids: List of feature IDs to extract streamflow data for.
     Returns:
         time_stream_df = A pandas DataFrame containing the extracted streamflow data with timestamps as the index.
