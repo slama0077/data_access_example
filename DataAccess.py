@@ -3,7 +3,7 @@ import nwmurl
 import joblib
 import pandas as pd
 
-def data_access(start_date, end_date, fcst_cycle, lead_time, feature_ids):
+def data_access(start_date, end_date, feature_ids, fcst_cycle=[0], lead_time=[1]):
     ''' Access NWM data from cloud storage using kerchunk and xarray.
     Args:
         start_date: Start date in YYYYMMDDHHMM format.
@@ -44,4 +44,3 @@ def data_access(start_date, end_date, fcst_cycle, lead_time, feature_ids):
     time_streamflow_df['time'] = time
     time_streamflow_df = time_streamflow_df.set_index('time')
     return time_streamflow_df
-    # return time, streamflow
