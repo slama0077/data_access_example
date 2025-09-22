@@ -1,11 +1,9 @@
-import numpy as np
 import xarray as xr
-import matplotlib.pyplot as plt
-import urlgennwm
+import nwmurl
 import joblib
 import pandas as pd
 
-def data_access(start_date, end_date, fcst_cycle, feature_ids):
+def data_access(start_date, end_date, fcst_cycle, lead_time, feature_ids):
     ''' Access NWM data from cloud storage using kerchunk and xarray.
     Args:
         start_date: Start date in YYYYMMDDHHMM format.
@@ -15,9 +13,16 @@ def data_access(start_date, end_date, fcst_cycle, feature_ids):
     Returns:
         time_stream_df = A pandas DataFrame containing the extracted streamflow data with timestamps as the index.
     '''
+    
+    varinput = 1
+    geoinput = 1
+    runinput = 1
+    urlbaseinput = 9
+    meminput = 0
 
-    url_list = urlgennwm.generate_urls(start_date, end_date, fcst_cycle)
-        
+
+    url_list = nwmurl.generate_urls_operational(start_date, end_date, fcst_cycle, lead_time, varinput, geoinput, runinput, urlbaseinput, meminput)
+    
     def process_file(file_url, feature_id):
         ds = xr.open_dataset(
             file_url,
