@@ -2,8 +2,14 @@ import xarray as xr
 import nwmurl
 import joblib
 import pandas as pd
+from data_processing.forcings import compute_zonal_stats
+import os
+import geopandas as gpd
+import random
+import pathlib
+import shutil
 
-def data_access(start_date, end_date, feature_ids, fcst_cycle=[0], lead_time=[1]):
+def data_access_streamflow(start_date, end_date, feature_ids, fcst_cycle=[0], lead_time=[1]):
     ''' Access NWM data from cloud storage using kerchunk and xarray.
     Args:
         start_date: Start date in YYYYMMDDHHMM format.
@@ -44,3 +50,35 @@ def data_access(start_date, end_date, feature_ids, fcst_cycle=[0], lead_time=[1]
     time_streamflow_df['time'] = time
     time_streamflow_df = time_streamflow_df.set_index('time')
     return time_streamflow_df
+
+
+def data_access_forcing(start_date, end_date, cat_ids, hydrofabric, fcst_cycle=[0], lead_time=[1]):
+    
+    if not os.path.exists(hydrofabric):
+        print("The hydrofabric doesn't exist")
+        return
+    
+    print("Opening hydrofabric and subsetting the given catchments")
+    gdf = gpd.read_file(hydrofabric, layer = 'divides')
+    gdf = gdf.loc[gdf['divide_id'].isin(cat_ids)]
+       
+    varinput = 5
+    geoinput = 1
+    runinput = 1
+    urlbaseinput = 9
+    meminput = 0
+
+
+    url_list = nwmurl.generate_urls_operational(start_date, end_date, fcst_cycle, lead_time, varinput, geoinput, runinput, urlbaseinput, meminput)
+    gridded_data = xr.open_mfdataset(url_list, combine= 'nested',concat_dim='time', engine = 'kerchunk', storage_options = {})
+    
+    forcing_dir = "forcing_dir" + str(random.randint(0, 10000))
+    forcing_dir_temp = forcing_dir + "/"+ "temp"
+    os.makedirs(forcing_dir_temp)
+    compute_zonal_stats(gdf, gridded_data, pathlib.Path(forcing_dir))
+    ds = xr.open_dataset(forcing_dir + "/" + "forcings.nc")
+    shutil.rmtree(forcing_dir)
+    return ds
+    
+    
+    
