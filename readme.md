@@ -50,11 +50,8 @@ https://communityhydrofabric.s3.us-east-1.amazonaws.com/hydrofabrics/community/c
 > pip install -r requirements.txt
 > ```
 > This order avoids version conflicts. A permanent fix is pending in a submitted PR to `NGIAB_data_preprocess`.
-    ```bash
-    pip install -r requirements.txt
-    ```
 
-3. **Run the example:**
+3. **Run the example:**<br>
     Run the cells in DataAccessExample_V1.ipynb to see how to use the API
 
 ## Folder Structure
