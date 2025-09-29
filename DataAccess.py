@@ -9,7 +9,7 @@ import random
 import pathlib
 import shutil
 
-def data_access_streamflow(start_date, end_date, feature_ids, fcst_cycle=[0], lead_time=[1]):
+def data_access_streamflow(start_date, end_date, feature_ids, range_type, fcst_cycle=[0], lead_time=[1]):
     ''' Access NWM data from cloud storage using kerchunk and xarray.
     Args:
         start_date: Start date in YYYYMMDDHHMM format.
@@ -23,7 +23,15 @@ def data_access_streamflow(start_date, end_date, feature_ids, fcst_cycle=[0], le
     
     varinput = 1
     geoinput = 1
-    runinput = 1
+    if range_type == "short_range":
+        runinput = 1
+    elif range_type == "medium_range":
+        runinput = 2
+    elif range_type == "long_range":
+        runinput = 4
+    else:
+        print("Please provide a valid range type: short_range, medium_range, or long_range")
+        return
     urlbaseinput = 9
     meminput = 0
 
@@ -52,7 +60,7 @@ def data_access_streamflow(start_date, end_date, feature_ids, fcst_cycle=[0], le
     return time_streamflow_df
 
 
-def data_access_forcing(start_date, end_date, cat_ids, hydrofabric, fcst_cycle=[0], lead_time=[1]):
+def data_access_forcing(start_date, end_date, cat_ids, hydrofabric, range_type, fcst_cycle=[0], lead_time=[1]):
     
     if not os.path.exists(hydrofabric):
         print("The hydrofabric doesn't exist")
@@ -64,13 +72,22 @@ def data_access_forcing(start_date, end_date, cat_ids, hydrofabric, fcst_cycle=[
        
     varinput = 5
     geoinput = 1
-    runinput = 1
+    if range_type == "short_range":
+        runinput = 1
+    elif range_type == "medium_range":
+        runinput = 2
+    elif range_type == "long_range":
+        runinput = 4
+    else:
+        print("Please provide a valid range type: short_range, medium_range, or long_range")
+        return
     urlbaseinput = 9
     meminput = 0
 
 
     url_list = nwmurl.generate_urls_operational(start_date, end_date, fcst_cycle, lead_time, varinput, geoinput, runinput, urlbaseinput, meminput)
     gridded_data = xr.open_mfdataset(url_list, combine= 'nested',concat_dim='time', engine = 'kerchunk', storage_options = {})
+    gridded_data = gridded_data.drop_vars(['crs'])
     
     forcing_dir = "forcing_dir" + str(random.randint(0, 10000))
     forcing_dir_temp = forcing_dir + "/"+ "temp"
