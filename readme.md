@@ -1,4 +1,4 @@
-# Contribute Forecast Data Access Example
+# Forecast Data Access Example
 
 This repository demonstrates how to use the `DataAccess` library to retrieve two primary types of forecast outputs: **streamflow forecasts** and **forcing values**. The provided code examples show how to access these datasets efficiently from cloud storage using `xarray`, `kerchunk`, and related tools.
 
