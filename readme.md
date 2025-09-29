@@ -52,7 +52,7 @@ https://communityhydrofabric.s3.us-east-1.amazonaws.com/hydrofabrics/community/c
 > This order avoids version conflicts. A permanent fix is pending in a submitted PR to `NGIAB_data_preprocess`.
 
 3. **Run the example:**<br>
-    Run the cells in DataAccessExample_V1.ipynb to see how to use the API
+    Run the cells in DataAccessExample_V1.ipynb to see how to use DataAccess library
 
 ## Folder Structure
 
