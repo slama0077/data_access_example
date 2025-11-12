@@ -1,4 +1,4 @@
-# Contribute Forecast Data Access Example
+# Forecast Data Access Example
 
 This repository demonstrates how to use the `DataAccess` library to retrieve two primary types of forecast outputs: **streamflow forecasts** and **forcing values**. The provided code examples show how to access these datasets efficiently from cloud storage using `xarray`, `kerchunk`, and related tools.
 
@@ -11,7 +11,7 @@ To obtain streamflow forecasts, use the `data_access_streamflow` function. This 
 - `range_type`: Forecast range (`short_range`, `medium_range`, or `long_range`).
 - Optional: `fcst_cycle` (forecast cycles, e.g., `[0, 6, 12, 18]`) and `lead_time` (lead times, e.g., `[1, 2, ..., 36]`).
 
-The function returns a pandas DataFrame with streamflow values indexed by time for the specified features.
+The function returns a pandas DataFrame with streamflow values indexed by time for the specified feature-ids.
 
 ### Forcing Values
 
@@ -36,7 +36,7 @@ https://communityhydrofabric.s3.us-east-1.amazonaws.com/hydrofabrics/community/c
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/Contribute_Forecast.git
+    git clone https://github.com/CIROH-UA/data_access_example.git
     cd data_access_example
     ```
 
@@ -50,12 +50,9 @@ https://communityhydrofabric.s3.us-east-1.amazonaws.com/hydrofabrics/community/c
 > pip install -r requirements.txt
 > ```
 > This order avoids version conflicts. A permanent fix is pending in a submitted PR to `NGIAB_data_preprocess`.
-    ```bash
-    pip install -r requirements.txt
-    ```
 
-3. **Run the example:**
-    Run the cells in DataAccessExample_V1.ipynb to see how to use the API
+3. **Run the example:**<br>
+    Run the cells in DataAccessExample_V1.ipynb to see how to use DataAccess library
 
 ## Folder Structure
 
