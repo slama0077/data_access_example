@@ -68,7 +68,7 @@ def data_access_streamflow(
 
     result_values = sorted(result_values, key=lambda x: x[1][0])
     streamflow = [item[0] for item in result_values]
-    time = [item[1] for item in result_values]
+    time = [item[1][0] for item in result_values]
 
     time_streamflow_df = pd.DataFrame(streamflow, columns=feature_ids)
     time_streamflow_df["time"] = time
